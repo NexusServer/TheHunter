@@ -20,7 +20,7 @@ public class Main extends PluginBase implements Listener {
 	public static boolean gaming = false;
 	public static Player hunter;
 	public Player last;
-
+	
 	public static int gameTime;
 	public static final int PLAYER_WIN = 1;
 	public static final int HUNTER_WIN = 2;
@@ -29,15 +29,15 @@ public class Main extends PluginBase implements Listener {
 	public void onEnable() {
 		this.getServer().getPluginManager().registerEvents(this, this);
 		this.getServer().getCommandMap().register("hunter", new HunterJoinPlugin());
-		this.getServer().getScheduler().scheduleDelayedTask(new Task() {
-
+this.getServer().getScheduler().scheduleDelayedTask(new Task() {
+			
 			@Override
 			public void onRun(int currentTick) {
 				Main.start();
+				// TODO Auto-generated method stub
 				
-
 			}
-		}, 20 * 60 * 2);
+		}, 20*60*2);
 	}
 
 	public static void join(Player player) {
@@ -57,13 +57,17 @@ public class Main extends PluginBase implements Listener {
 		hunter = onlinePlayers.get(new Random().nextInt(onlinePlayers.size()));
 		hunter.getInventory().addItem(Item.get(Item.BOW));
 		hunter.getInventory().addItem(Item.get(Item.ARROW, 1, 64));
-		hunter.sendMessage("당신은 헌터입니다");
-
-		onlinePlayers.forEach((p) -> {
+		hunter.sendMessage("당신은 헌터입니다");onlinePlayers.forEach((p) -> {
 			p.setTitleAnimationTimes(50, 200, 50);
 			p.sendTitle("§6게임 제한시간 = " + 60 * onlinePlayers.size());
 		});
+		Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
 
+			@Override
+			public void onRun(int currentTick) {
+				
+			}
+		}, 20 * 60 * onlinePlayers.size());
 	}
 
 	@EventHandler
@@ -78,30 +82,30 @@ public class Main extends PluginBase implements Listener {
 		}
 	}
 
-	public void end(int type) {
+	public static  void end(int type) {
 		switch (type) {
 		case Main.HUNTER_WIN:
-			this.getServer().getOnlinePlayers().values().forEach((p) -> {
+			Server.getInstance().getOnlinePlayers().values().forEach((p) -> {
 				p.setTitleAnimationTimes(50, 200, 50);
 				p.sendTitle("§c헌터가 승리하였습니다");
 			});
 			break;
 		case Main.PLAYER_WIN:
-			this.getServer().getOnlinePlayers().values().forEach((p) -> {
+			Server.getInstance().getOnlinePlayers().values().forEach((p) -> {
 				p.setTitleAnimationTimes(50, 200, 50);
 				p.sendTitle("§b플레이어가 승리하였습니다");
 			});
 			break;
 		}
-		this.getServer().getScheduler().scheduleDelayedTask(new Task() {
-
+		Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+			
 			@Override
 			public void onRun(int currentTick) {
 				Main.start();
 				// TODO Auto-generated method stub
-
+				
 			}
-		}, 20 * 60 * 5);
+		}, 20*60*5);
 	}
 
 	@EventHandler
